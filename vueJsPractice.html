@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VueJS</title>
+</head>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.css">
+<body>
+
+<div id="demo">
+  <form id="search">
+    Search <input name="query" v-model="query">
+  </form>
+  <input type="radio" id="one" value="name" v-model="picked" >
+<label for="one">nom</label>
+<br>
+<input type="radio" id="two" value="email" v-model="picked">
+<label for="two">mail</label>
+<br>
+<span>Choisi : {{ picked }}</span>
+  <table>
+    <thead>
+      <tr>
+        <th nowrap>id</th>
+        <th nowrap>name</th>
+        <th nowrap>email</th>        
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in tableFilter">
+        <td >{{item.id}}</td>
+        <td >{{item.name}}</td>
+        <td >{{item.email}}</td>        
+      </tr>
+    </tbody>
+  </table>
+</div>
+<style type="text/css" media="screen">
+  .list-item {
+
+  margin-right: 10px;
+}
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+</style>
+<div id="app">
+  <progress class="progress is-primary" :value="progress" max="100">30%</progress>
+  <button type="button" @click="add" class="button">click me</button>
+<div>
+  <input type="text" v-model="newTask.action">
+  <button type="button" @click="addTask"> Add</button>  
+  <span v-show="show = true">{{error}}</span>
+</div>
+    <h1>In Process:</h1>
+    <transition-group name="list">
+    <li v-for="task in tasks" :key="task.id" class="list-item" > <input type="checkbox" v-model="task.finished"/>
+      {{ task.action}}
+    </li>
+  </transition-group>
+    <div>
+    <h1>Incompleted:</h1>
+    <ul>
+      <li v-for="task in incompleteTasks"> {{task.action}}</li>
+    </ul>
+  </div>
+    <div>
+    <h1>completed:</h1>
+    <ul>
+      <li v-for="task in completedTasks">{{task.action}}</li>
+    </ul>
+  </div>
+</div>
+
+
+<div class="container" id="panel">
+  <p class="panel-heading">
+    Gallery
+  </p>
+  <tabs>
+    <tab name="Books" :selected="true">
+    <list-book v-for="book in books" :key="book.id">          
+    <a class="panel-block">
+    <span class="panel-icon">
+      <i class="fa fa-book"></i>
+    </span>
+    {{book.name}}
+  </a> 
+    </list-book>
+    </tab>
+    <tab name="Films">
+          <a class="panel-block">
+    <span class="panel-icon">
+      <i class="fa fa-book"></i>
+    </span>
+    Interstellar
+  </a>
+        <a class="panel-block">
+    <span class="panel-icon">
+      <i class="fa fa-book"></i>
+    </span>
+    FightClub
+  </a>
+        <a class="panel-block">
+    <span class="panel-icon">
+      <i class="fa fa-book"></i>
+    </span>
+    Alien
+  </a>
+
+    </tab>
+    <tab name="Photography">      <a class="panel-block">
+    <span class="panel-icon">
+      <i class="fa fa-book"></i>
+    </span>
+    Nature
+  </a>
+        <a class="panel-block">
+    <span class="panel-icon">
+      <i class="fa fa-book"></i>
+    </span>
+    Urbain
+  </a>
+  </tab>
+
+  </tabs>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://unpkg.com/vue"></script>
+<script src="js/todo.js"></script>
+<script>
+
+let app = new Vue({
+  el:'#app',
+  data: {
+    newTask: {id: 0, action: '', finished: false},
+    tasks:  [],
+    progress: 0,
+    error: '',
+    show: false 
+  },
+  methods: {
+    addTask() {
+      if (this.newTask.action != '' ) {
+      id = this.newTask.id;
+      id++;
+      this.tasks.unshift(this.newTask);
+      this.newTask = {id: id, action: '', finished: false};
+} else {
+  this.error = "please write something!"
+  // this.show = true;
+}
+    },
+    add() {
+      this.progress += 10;
+      console.log(this.progress);
+      if (this.progress >= 100)
+          console.log("100% !");
+    }
+
+  },
+  computed: {
+    incompleteTasks() {
+      return this.tasks.filter(tasks => ! tasks.finished);
+    },
+    completedTasks() {
+      return this.tasks.filter(tasks => tasks.finished);
+    }
+  }
+});
+
+Vue.component( 'tabs', {
+  template: `
+  <div>
+    <div>
+        <p class="panel-tabs">
+    <a v-for="tab in tabs" :class=" {'is-active' : tab.active }" @click="selectedTab(tab)" :href="tab.href">{{tab.name}} </a>
+  </p>
+    </div>
+
+    <div class="tab-details">
+      <slot></slot>
+    </div>
+    </div>
+
+`, 
+data() {
+  return { tabs: []}
+},
+
+created() {
+  this.tabs = this.$children;
+},
+methods: {
+  selectedTab(selectedTab) {
+   this.tabs.forEach( tab => {
+    tab.active = (tab.name == selectedTab.name)
+   });
+  }
+}
+});
+
+// tab 
+Vue.component( 'tab', {
+  template: `
+<div v-show="active">
+    <slot></slot>
+</div>
+`,
+props: {
+  name: {required: true},
+  selected: {default: false}
+},
+data() {
+  return {
+  active: false
+    
+  };
+},
+mounted() {
+  this.active = this.selected;
+},
+computed: {
+  href() {
+    return '#' + this.name.toLowerCase().replace(/ /g, '-');
+  }
+}
+
+});
+Vue.component('list-book', {
+  template: `<div>
+    <slot></slot>
+  </div>`
+});
+let panel = new Vue({
+  el:'#panel',
+  data: {
+    books: [{name:'Fille du destin'},{name:'Metro 2022'},{name:'Le Parfum'},{name:"L'étranger"}]
+  
+  }
+});
+
+let vm = new Vue({
+  el: '#demo',
+  data: {
+    customers: [
+          { id: '1', name: 'estelle', profile_pic: 'https://i.stack.imgur.com/CE5lz.png', email:'ab@gmail.com', phone:'+91959657248', unread:'0' },
+          { id: '2', name: 'oussama', profile_pic: 'https://i.stack.imgur.com/CE5lz.png', email:'abcd@gmail.com', phone:'+919456664023', unread:'0' },
+          { id: '3', name: 'amina', profile_pic: 'https://i.stack.imgur.com/CE5lz.png', email:'test@gmail.com', phone:'+919566565065', unread:'0' },
+          { id: '4', name: 'farida', profile_pic: 'https://i.stack.imgur.com/CE5lz.png', email:'sample@gmail.com', phone:'+916466004566', unread:'0' }
+        ],
+    query: '',
+    picked: 'name',
+   },
+  computed: {
+    tableFilter() {
+        console.log(this.picked);
+        return this.findBy(this.customers, this.query, this.picked);
+    }
+  },
+  methods: {
+    findBy: function (list, value, column) {
+      return list.filter(function (item) {
+        return item[column].includes(value)
+      })
+    }
+  }
+    
+});
+
+
+
+
+</script>
+</body>
+</html>
