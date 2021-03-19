@@ -68,3 +68,20 @@ function collectOddValues(array: number[]): number[] {
 
 
 collectOddValues([1, 2, 3, 4, 5])
+
+// pure recursion
+
+function collectOddValues2(input) {
+    let result = []
+    if (input.length == 0) {
+        return result
+    }
+    if (input[0] % 2 !== 0) {
+        result.push(input[0])
+    }
+    result = result.concat(collectOddValues(input.slice(1)))
+    return result
+}
+
+
+console.log(collectOddValues2([1, 2, 3, 4, 5]))
