@@ -54,3 +54,13 @@ function collectOddValues2(input) {
     return result;
 }
 console.log(collectOddValues2([1, 2, 3, 4, 5]));
+// Linear pseudo code
+function linearSearch(items, value) {
+    for (var i = 0; i < items.length; i++) {
+        if (items[i] == value) {
+            return i;
+        }
+    }
+    return -1;
+}
+console.log(linearSearch(["jhon", "dave", "chris", "robben"], "dave"));
