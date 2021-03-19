@@ -54,3 +54,17 @@ function factorial(num: number): number {
 console.log("factorial", factorial(4))
 
 // Helper Method Recursion
+
+function collectOddValues(array: number[]): number[] {
+
+    let result: number[] = []
+    function helper(helperInput) {
+        // logic to find odd numbers
+        result.push(helperInput)
+    }
+    helper(array)
+    return result;
+}
+
+
+collectOddValues([1, 2, 3, 4, 5])
