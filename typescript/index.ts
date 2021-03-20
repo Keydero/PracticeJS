@@ -99,23 +99,6 @@ console.log(linearSearch(["jhon", "dave", "chris", "robben"], "dave"))
 
 // Binary Search
 
-function binarySearch(items: number[], value: number) {
-    let start = 0
-    let end = items.length - 1
-    let middle = Math.floor((start + end) / 2)
-    for (let i = middle; middle <= items.length; i++) {
-        if (i === value)
-            console.log("Found")
-        return i;
-
-    }
-    return -1;
-}
-
-console.log("BinarySearch", binarySearch([1, 2, 3, 8, 14, 17, 19, 29, 32], 14))
-
-
-
 
 // Refactored Version
 function binarySearch(arr, elem) {
@@ -131,3 +114,22 @@ function binarySearch(arr, elem) {
 }
 
 console.log(binarySearch([2, 5, 6, 9, 13, 15, 28, 30], 103))
+
+
+//class
+
+class Vehicule {
+    protected honk(): string {
+        return "Beep Beep"
+    }
+}
+class Car extends Vehicule {
+
+    beep() {
+        return this.honk()
+    }
+}
+
+let bmw = new Car().beep()
+
+console.log("bmw", bmw)

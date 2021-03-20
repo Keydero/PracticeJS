@@ -1,3 +1,18 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 console.log("Your code goes here");
 var add = function (num1, num2) { return num1 + num2; };
 console.log(add(1, 2));
@@ -64,15 +79,39 @@ function linearSearch(items, value) {
 }
 console.log(linearSearch(["jhon", "dave", "chris", "robben"], "dave"));
 // Binary Search
-function binarySearch(items, value) {
+// Refactored Version
+function binarySearch(arr, elem) {
     var start = 0;
-    var end = items.length - 1;
+    var end = arr.length - 1;
     var middle = Math.floor((start + end) / 2);
-    for (var i = middle; middle <= items.length; i++) {
-        if (i === value)
-            console.log("Found");
-        return i;
+    while (arr[middle] !== elem && start <= end) {
+        if (elem < arr[middle])
+            end = middle - 1;
+        else
+            start = middle + 1;
+        middle = Math.floor((start + end) / 2);
     }
-    return -1;
+    return arr[middle] === elem ? middle : -1;
 }
-console.log("BinarySearch", binarySearch([1, 2, 3, 8, 14, 17, 19, 29, 32], 14));
+console.log(binarySearch([2, 5, 6, 9, 13, 15, 28, 30], 103));
+//class
+var Vehicule = /** @class */ (function () {
+    function Vehicule() {
+    }
+    Vehicule.prototype.honk = function () {
+        return "Beep Beep";
+    };
+    return Vehicule;
+}());
+var Car = /** @class */ (function (_super) {
+    __extends(Car, _super);
+    function Car() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Car.prototype.beep = function () {
+        return this.honk();
+    };
+    return Car;
+}(Vehicule));
+var bmw = new Car().beep();
+console.log("bmw", bmw);
