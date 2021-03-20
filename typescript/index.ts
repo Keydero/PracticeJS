@@ -119,17 +119,24 @@ console.log(binarySearch([2, 5, 6, 9, 13, 15, 28, 30], 103))
 //class
 
 class Vehicule {
+    color: string;
+    // instantly executed when we create an instance
+    constructor(color, public windows: number) {
+        this.color = color;
+    }
     protected honk(): string {
         return "Beep Beep"
     }
 }
 class Car extends Vehicule {
-
+    constructor(color: string, windows: number, public wheels: number) {
+        super(color, windows)
+    }
     beep() {
         return this.honk()
     }
 }
 
-let bmw = new Car().beep()
+let bmw = new Car("magenta", 4, 4)
 
 console.log("bmw", bmw)

@@ -96,7 +96,10 @@ function binarySearch(arr, elem) {
 console.log(binarySearch([2, 5, 6, 9, 13, 15, 28, 30], 103));
 //class
 var Vehicule = /** @class */ (function () {
-    function Vehicule() {
+    // instantly executed when we create an instance
+    function Vehicule(color, windows) {
+        this.windows = windows;
+        this.color = color;
     }
     Vehicule.prototype.honk = function () {
         return "Beep Beep";
@@ -113,5 +116,5 @@ var Car = /** @class */ (function (_super) {
     };
     return Car;
 }(Vehicule));
-var bmw = new Car().beep();
+var bmw = new Car("magenta", 4);
 console.log("bmw", bmw);
